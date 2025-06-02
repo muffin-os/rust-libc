@@ -549,6 +549,9 @@ cfg_if! {
         #[link(name = "bsd")]
         #[link(name = "pthread")]
         extern "C" {}
+    } else if #[cfg(target_os = "muffin")] {
+        #[link(name = "muffin")]
+        extern "C" {}
     } else {
         #[link(name = "c")]
         #[link(name = "m")]
@@ -1807,6 +1810,9 @@ cfg_if! {
     } else if #[cfg(target_os = "redox")] {
         mod redox;
         pub use self::redox::*;
+    } else if #[cfg(target_os = "muffin")] {
+        mod muffin;
+        pub use self::muffin::*;
     } else if #[cfg(target_os = "cygwin")] {
         mod cygwin;
         pub use self::cygwin::*;
@@ -1824,5 +1830,6 @@ cfg_if! {
         pub use self::nuttx::*;
     } else {
         // Unknown target_os
+        rustc_std_workspace_core::compile_error!(rustc_std_workspace_core::concat!("Unsupported target_os: ", rustc_std_workspace_core::env!("TARGET")));
     }
 }
